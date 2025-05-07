@@ -1,6 +1,6 @@
-package tw.brad.tutor;
+package tw.shawn.tutor;
 
-public class Brad70 {
+public class Shawn70 {
 	public static void main(String[] args) {
 		Store2 store = new Store2();
 		Producer2 p = new Producer2(store);
