@@ -9,9 +9,9 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class JDBC09 {
-	private static final String URL = "jdbc:mysql://localhost/shawn"; 
+	private static final String URL = "jdbc:mysql://localhost/brad"; 
 	private static final String USER = "root";
-	
+	private static final String PASSWD = "root";
 	private static final String SQL = 
 		"SELECT id,name pname, feature,city,town FROM gift " + 
 			"WHERE name LIKE ? OR feature LIKE ? OR city LIKE ? OR town LIKE ?";
@@ -25,7 +25,7 @@ public class JDBC09 {
 		String kw = "%" + search + "%";
 		Properties prop = new Properties();
 		prop.put("user", USER);
-		
+		prop.put("password", PASSWD);
 		try {
 			Connection conn = DriverManager.getConnection(URL, prop);
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
