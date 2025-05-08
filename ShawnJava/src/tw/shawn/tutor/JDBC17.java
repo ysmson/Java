@@ -14,13 +14,17 @@ import java.util.Scanner;
 
 import tw.shawn.apis.BCrypt;
 
-public class JDBC14 {
-	private static final String URL = "jdbc:mysql://localhost/shawn"; 
+public class JDBC17 {
+	private static final String URL = "jdbc:mysql://localhost/north"; 
 	private static final String USER = "root";
 	
 	private static Connection conn;
 	private static final String QUERY = 
-		"SELECT * FROM member WHERE id = ?";
+		"SELECT e.EmployeeID, e.LastName, SUM(od.UnitPrice*od.Quantity) total FROM orders o "
+		+ "JOIN orderdetails od ON (o.OrderID = od.OrderID) "
+		+ "JOIN employees e ON (o.EmployeeID = e.EmployeeID) "
+		+ "GROUP BY o.EmployeeID "
+		+ "ORDER BY total DESC";
 
 	public static void main(String[] args) {
 		Properties prop = new Properties();
@@ -29,30 +33,13 @@ public class JDBC14 {
 		try {
 			conn = DriverManager.getConnection(URL, prop);
 			PreparedStatement pstmt = conn.prepareStatement(QUERY);
-			pstmt.setInt(1, 3);
 			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				String account = rs.getString("account");
-				InputStream in = rs.getBinaryStream("icon");
-				new Thread(){
-					public void run() {
-						try {
-							String filename = String.format("dir2/%s.png", account);
-							FileOutputStream fout = new FileOutputStream(filename);
-							
-							byte[] buf = new byte[128*1024]; 
-							int len = in.read(buf);
-							
-							fout.write(buf, 0, len);
-							fout.flush();
-							fout.close();
-							System.out.println("OK");
-						}catch(Exception e) {
-							System.out.println(e);
-						}
-					}
-				}.start();
-				System.out.println("Writing...");
+			int rank = 1;
+			while (rs.next()) {
+				String id = rs.getString("EmployeeID");
+				String name = rs.getString("LastName");
+				String total = rs.getString("total");
+				System.out.printf("%d: %s : %s : %s\n", rank++, id, name, total);
 			}
 			
 		}catch(Exception e) {

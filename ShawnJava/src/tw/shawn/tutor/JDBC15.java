@@ -11,17 +11,23 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import tw.shawn.apis.BCrypt;
+import tw.shawn.apis.Bike;
 
-public class JDBC13 {
+public class JDBC15 {
 	private static final String URL = "jdbc:mysql://localhost/shawn"; 
 	private static final String USER = "root";
 	
 	private static Connection conn;
 	private static final String UPDATE_SQL = 
-		"UPDATE member SET icon = ? WHERE id = ?";
+		"UPDATE member SET bike = ? WHERE id = ?";
 	
 
 	public static void main(String[] args) {
+		Bike bike = new Bike();
+		bike.upSpeed();bike.upSpeed();bike.upSpeed();bike.upSpeed();
+		bike.upSpeed();bike.upSpeed();bike.upSpeed();bike.upSpeed();
+		System.out.println(bike);
+
 		Properties prop = new Properties();
 		prop.put("user", USER);
 		
@@ -29,17 +35,13 @@ public class JDBC13 {
 			conn = DriverManager.getConnection(URL, prop);
 			PreparedStatement pstmt = conn.prepareStatement(UPDATE_SQL);
 			
-			FileInputStream fin = new FileInputStream("dir2/yahoo.jpg");
-			
-			pstmt.setBinaryStream(1, fin);
+			pstmt.setObject(1, bike);
 			pstmt.setInt(2, 8);
-			if (pstmt.executeUpdate()>0) {
-				System.out.println("Success");
+			if (pstmt.executeUpdate() > 0) {
+				System.out.println("OK");
 			}else {
-				System.out.println("Failure");
+				System.out.println("XX");
 			}
-			
-			fin.close();
 			
 		}catch(Exception e) {
 			System.out.println(e);
