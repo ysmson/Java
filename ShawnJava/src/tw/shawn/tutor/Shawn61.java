@@ -37,17 +37,22 @@ public class Shawn61 {
     }
 
     static void parseJSON(String json) {
+        // 將字串轉換為 JSONArray
         JSONArray root = new JSONArray(json);
+        // 印出資料總筆數
         System.out.println("資料總筆數：" + root.length());
 
+        // 迴圈處理每一筆資料
         for (int i = 0; i < root.length(); i++) {
+            // 取得當前索引的 JSONObject
             JSONObject row = root.getJSONObject(i);
 
-            // 安全取得欄位值
+            // 安全取得欄位值，若欄位不存在則提供預設值
             String city = row.optString("County", "未知縣市");
             String name = row.optString("Name", "無名稱");
             String tel = row.optString("ContactTel", "無電話");
 
+            // 印出格式化後的資料
             System.out.printf("%s - %s : %s\n", city, name, tel);
         }
     }
